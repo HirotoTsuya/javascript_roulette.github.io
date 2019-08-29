@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang='ja'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>ルーレット</title>
+        <link rel='stylesheet' href='J_roulette.css'>
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+        
+            var interval;
+            var interval_id = false;
+            var arr = ["td1", "td2", "td3","td4","td5","td6","td7","td8","td9","td10","td11","td12","td13","td14","td15","td16"];
+            
+            
+            
+            
+            function count(){
+                
+                $('#start').prop('disabled', true);
+                $('#stop').prop('disabled', false);
+                
+                if(interval_id === false){
+                    interval = setInterval(flash_roop,1);
+                    interval_id = true;
+                }
+            }
+    
+            
+            function flash_roop(){
+                
+                var interval_clear;
+                
+                //要素をランダムで取得する
+                var val = getRandomValue(arr);
+                
+                //ランダム関数
+                function getRandomValue(arr){
+                  var result = null;
+                  var len = arr.length;
+                  if(len > 0){
+                    result = arr[Math.floor(Math.random() * len)];
+                  }
+                  return result;
+                }
+                
+                //背景赤のセルを白へ戻す
+                all_td_white();
+                
+                
+                //ランダムで背景を赤
+                var val_random = document.getElementById(val);
+                val_random.style.backgroundColor = 'red';
+                
+            }
+                
+                //すべてのtdを取得し背景を白色へ
+                function all_td_white(){
+                    var td = document.getElementsByTagName("td");
+                    for(var i = 0; i < td.length; i++)
+                        if(td[i].style.backgroundColor === 'red'){
+                        td[i].style.backgroundColor = 'white'
+                            
+                        }
+                }
+                
+                
+                
+                
+                //stop
+                function roop_stop(){
+                    $('#stop').prop('disabled', true);
+                    clearInterval(interval);
+                    interval_id = false;
+                    //止まっているマスを青色に
+                    var td = document.getElementsByTagName("td");
+                    for(var i = 0; i < td.length; i++){
+                        if(td[i].style.backgroundColor === 'red'){
+                            td[i].style.backgroundColor = 'blue';
+                            var id = td[i].id;
+                            var index = arr.indexOf(id);
+                            arr.splice(index,1);
+                        }
+                        $('#start').prop('disabled', false);
+                    }
+                    start_prevent();
+                }
+                
+                    //スタート16越え防止
+                function start_prevent(){
+                    if(arr < 1){
+                       $('#start').prop('disabled', true);
+                    }
+                }
+                
+                
+                //リセット
+                
+                function all_reset(){
+                    $('td').css('background-color','white');
+                    clearInterval(interval);
+                    interval_id = false;
+                    var arr_reset = ["td1", "td2", "td3","td4","td5","td6","td7","td8","td9","td10","td11","td12","td13","td14","td15","td16"];
+                    arr = arr_reset;
+                    $('#start').prop('disabled', false);
+                    $('#stop').prop('disabled', false);
+                }
+            
+            
+                
+            
+            
+            $(document).ready(
+                function(){
+                    $('#start').click(count);
+                    $('#stop').click(roop_stop);
+                    $('#reset').click(all_reset);
+                })
+       
+            
+        </script>  
+    </head>
+    
+    
+    
+    
+    
+    
+    <body>
+
+            <table id='table'>
+                <tr>
+                   <td id='td1'>1</td>
+                   <td id='td2'>2</td>
+                   <td id='td3'>3</td>
+                   <td id='td4'>4</td>
+                </tr>
+                <tr>
+                   <td id='td5'>5</td>
+                   <td id='td6'>6</td>
+                   <td id='td7'>7</td>
+                   <td id='td8'>8</td>
+                </tr>
+                <tr>
+                   <td id='td9'>9</td>
+                   <td id='td10'>10</td>
+                   <td id='td11'>11</td>
+                   <td id='td12'>12</td>
+                </tr>
+                <tr>
+                   <td id='td13'>13</td>
+                   <td id='td14'>14</td>
+                   <td id='td15'>15</td>
+                   <td id='td16'>16</td>
+                </tr>
+                
+            </table>
+            
+            
+            <button id='start'>スタート</button>
+            <button id='stop'>ストップ</button>
+            <button id='reset'>リセット</button>
+
+        
+    </body>
+</html>
